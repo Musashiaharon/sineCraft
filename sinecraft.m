@@ -10,14 +10,16 @@ phase = zeros(4,1);
 f = [1000, 3000, 6000, 4000];
 
 
-s = zeros(4,len_t);
+s = zeros(1,len_t);
 
-for i=1:4
+for i=1:1
 s(i,:) = round(A(i)*sin((t+phase(i)).*f(i)/fs)+offset(i));
 end
 
+dlmwrite('sines.txt', s');
 
-plot(   t, s(1,:),'b-', ...
-        t, s(2,:),'r-', ...
-        t, s(3,:),'g-', ...
-        t, s(4,:),'k-');
+%plot(   t, s(1,:),'b-', ...
+%        t, s(2,:),'r-', ...
+%        t, s(3,:),'g-', ...
+%        t, s(4,:),'k-');
+
