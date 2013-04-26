@@ -44,7 +44,7 @@ s=s';
 
 fprintf('\nSaving...\n');
 for i=1:m
-    file = sprintf('%d-%d.txt', f(i), phase(i));
+    file = sprintf('%d-%d.dat', f(i), phase(i));
     dlmwrite(file, s(:,i));
     fprintf('  Saved %s\n', file);
 end
