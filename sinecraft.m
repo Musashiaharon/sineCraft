@@ -2,6 +2,9 @@ fs = 48000;
 len_t = 1024;
 m = 8;
 
+datFormat = 'hex';
+%datFormat = 'bin';
+
 vs = 34030; % speed of sound at sea level, in cm/s
 
 fprintf('Computing %g samples. fs is %g.\n', len_t, fs);
@@ -42,10 +45,24 @@ end
 
 s=s';
 
+if strcmp(datFormat,'bin') || ...
+   strcmp(datFormat,'hex')
+    fprintf(strcat( ...
+        '\nInvalid datFormat "',        ...
+        datFormat,                      ...
+        'choose "bin" or "hex".\n',     ...
+        'Defaulting to "bin".\n'));
+    datFormat = 'bin';
+end
+
 fprintf('\nSaving...\n');
 for i=1:m
-    file = sprintf('%d-%d.dat', f(i), phase(i));
-    dlmwrite(file, s(:,i));
+    file = sprintf('%d-%d.%s', f(i), phase(i), datFormat);
+    if datFormat == 'hex'
+        dlmwrite(file, dec2hex(s(:,i)));
+    elseif datFormat == 'bin'
+        dlmwrite(file, dec2bin(s(:,i)));
+    end
     fprintf('  Saved %s\n', file);
 end
 
@@ -55,7 +72,7 @@ for i=1:m
     if i ~= 1 
         hold all;
     end
-    plot(t, s(:,i), '-');
+    plot(t, s(:,i), '.-');
     leg{i} = strcat(        ...
         num2str(f(i)),      ...
         'Hz \phi',          ...
@@ -63,6 +80,7 @@ for i=1:m
 end
 legend(leg);
 hold off;
+zoom xon;
 
 fprintf('[Done]\n\n');
 
