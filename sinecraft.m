@@ -2,8 +2,7 @@ fs = 48000;
 len_t = 1024;
 m = 8;
 
-datFormat = 'hex';
-%datFormat = 'bin';
+datFormat = 'hex'; % choose 'hex', 'bin' or 'dec'
 
 vs = 34030; % speed of sound at sea level, in cm/s
 
@@ -46,11 +45,12 @@ end
 s=s';
 
 if ~strcmp(datFormat,'bin') && ...
-   ~strcmp(datFormat,'hex')
+   ~strcmp(datFormat,'hex') && ...
+   ~strcmp(datFormat,'dec')
     fprintf(strcat( ...
         '\nInvalid datFormat "',        ...
         datFormat,                      ...
-        '"; choose "bin" or "hex".\n',     ...
+        '"; choose "bin", "hex" or "dec".\n',     ...
         'Defaulting to "bin".\n'));
     datFormat = 'bin';
 end
@@ -62,6 +62,9 @@ for i=1:m
         dlmwrite(file, dec2hex(s(:,i)));
     elseif datFormat == 'bin'
         dlmwrite(file, dec2bin(s(:,i)));
+    elseif datFormat == 'dec'
+        file = sprintf('%d-%d.dat', f(i), phase(i));
+        dlmwrite(file, s(:,i));
     end
     fprintf('  Saved %s\n', file);
 end
